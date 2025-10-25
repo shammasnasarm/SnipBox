@@ -29,7 +29,7 @@ class Snippet(models.Model):
     """
     title = models.CharField(max_length=100)
     note = models.TextField()
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         Tag,
         related_name='snippets'
     )
