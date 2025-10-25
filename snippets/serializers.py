@@ -80,3 +80,19 @@ class SnippetOverviewSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'url': {'view_name': 'snippet-detail', 'lookup_field': 'pk'}
         }
+
+
+class TagSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Tag list and tag detail views.
+
+    Used in:
+    - TagViewSet for listing tags.
+
+    Fields:
+    - id: Unique identifier of the tag.
+    - title: Title of the tag.
+    """
+    class Meta:
+        model = Tag
+        fields = ['id', 'title']
