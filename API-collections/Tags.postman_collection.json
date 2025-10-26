@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "b5fb9a9e-fdfb-421d-8a2b-50fb24dd8682",
+		"name": "Tags",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29209824",
+		"_collection_link": "https://blue-rocket-628931.postman.co/workspace/snipbox-api-collection~123caa18-de1f-42b7-b67c-e8931e48fc1e/collection/29209824-b5fb9a9e-fdfb-421d-8a2b-50fb24dd8682?action=share&source=collection_link&creator=29209824"
+	},
+	"item": [
+		{
+			"name": "Tags List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/tags/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"tags",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Snippets under tag",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/tags/1/snippets/",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"tags",
+						"1",
+						"snippets",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
