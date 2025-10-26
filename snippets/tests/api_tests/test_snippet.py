@@ -3,7 +3,7 @@
 from rest_framework.test import APITestCase
 from rest_framework.reverse import reverse
 from rest_framework import status
-from snippets.models import Snippet
+from snippets.models import Snippet, Tag
 from snippets.tests.factories import auth_factory, snippet_factory
 
 
@@ -29,6 +29,27 @@ class SnippetAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], "New Test Snippet")
         self.assertEqual(len(response.data['tags']), 2)
+    
+    def test_create_snippet_no_tag_duplication_success(self):
+        payload1 = {
+            "title": "First Snippet",
+            "note": "First note",
+            "tags": ["common", "tag"]
+        }
+        payload2 = {
+            "title": "Second Snippet",
+            "note": "Second note",
+            "tags": ["common", "tag"]
+        }
+        url = reverse('snippet-list')
+        response1 = self.client.post(url, payload1, format='json')
+        response2 = self.client.post(url, payload2, format='json')
+        self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response1.data['tags']), 2)
+        self.assertEqual(len(response2.data['tags']), 2)
+        tags = Tag.objects.all()
+        self.assertEqual(tags.count(), 2)
 
     def test_create_snippet_error(self):
         payload = {
