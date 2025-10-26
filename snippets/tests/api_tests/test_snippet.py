@@ -29,7 +29,7 @@ class SnippetAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], "New Test Snippet")
         self.assertEqual(len(response.data['tags']), 2)
-    
+
     def test_create_snippet_no_tag_duplication_success(self):
         payload1 = {
             "title": "First Snippet",
