@@ -27,8 +27,9 @@ class SnippetAPITestCase(APITestCase):
         url = reverse('snippet-list')
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['title'], "New Test Snippet")
-        self.assertEqual(len(response.data['tags']), 2)
+        response = response.json()
+        self.assertEqual(response['data']['title'], "New Test Snippet")
+        self.assertEqual(len(response['data']['tags']), 2)
 
     def test_create_snippet_no_tag_duplication_success(self):
         payload1 = {
@@ -46,8 +47,10 @@ class SnippetAPITestCase(APITestCase):
         response2 = self.client.post(url, payload2, format='json')
         self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(len(response1.data['tags']), 2)
-        self.assertEqual(len(response2.data['tags']), 2)
+        response1 = response1.json()
+        response2 = response2.json()
+        self.assertEqual(len(response1['data']['tags']), 2)
+        self.assertEqual(len(response2['data']['tags']), 2)
         tags = Tag.objects.all()
         self.assertEqual(tags.count(), 2)
 
@@ -57,25 +60,28 @@ class SnippetAPITestCase(APITestCase):
         url = reverse('snippet-list')
         response = self.client.post(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('title', response.data)
-        self.assertIn('note', response.data)
-        self.assertIn('tags', response.data)
+        response = response.json()
+        self.assertIn('title', response['errors'])
+        self.assertIn('note', response['errors'])
+        self.assertIn('tags', response['errors'])
 
     def test_overview_api_success(self):
         snippet_factory.SnippetFactory.create_batch(2, created_by=self.user)
         url = reverse('snippet-overview')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('total_count', response.data)
-        self.assertEqual(response.data['total_count'], 2)
-        self.assertIsInstance(response.data['snippets'], list)
+        response = response.json()
+        self.assertIn('total_count', response['data'])
+        self.assertEqual(response['data']['total_count'], 2)
+        self.assertIsInstance(response['data']['snippets'], list)
 
     def test_retrieve_snippet_success(self):
         snippet = snippet_factory.SnippetFactory(created_by=self.user)
         url = reverse('snippet-detail', args=[snippet.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], snippet.id)
+        response = response.json()
+        self.assertEqual(response['data']['id'], snippet.id)
 
     def tesst_retrive_snippet_not_found(self):
         url = reverse('snippet-detail', args=[999])
@@ -96,8 +102,9 @@ class SnippetAPITestCase(APITestCase):
         url = reverse('snippet-detail', args=[snippet.id])
         response = self.client.put(url, payload, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], "Updated Title")
-        self.assertEqual(len(response.data['tags']), 2)
+        response = response.json()
+        self.assertEqual(response['data']['title'], "Updated Title")
+        self.assertEqual(len(response['data']['tags']), 2)
 
     def test_delete_snippet_success(self):
         snippet = snippet_factory.SnippetFactory(created_by=self.user)
@@ -105,8 +112,9 @@ class SnippetAPITestCase(APITestCase):
         url = reverse('snippet-detail', args=[snippet.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = response.json()
         self.assertFalse(Snippet.objects.filter(id=snippet.id).exists())
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response['data']), 1)
 
 
 class TagAPITestCase(APITestCase):
@@ -119,8 +127,9 @@ class TagAPITestCase(APITestCase):
         snippet_factory.TagFactory.create_batch(3)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertEqual(len(response.data), 3)
+        response = response.json()
+        self.assertIsInstance(response['data'], list)
+        self.assertEqual(len(response['data']), 3)
 
     def test_list_tag_snippets_success(self):
         tag = snippet_factory.TagFactory(title="django")
@@ -133,11 +142,13 @@ class TagAPITestCase(APITestCase):
         url = reverse('tag-snippets', args=[tag.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertEqual(len(response.data), 2)
+        response = response.json()
+        self.assertIsInstance(response['data'], list)
+        self.assertEqual(len(response['data']), 2)
 
         url = reverse('tag-snippets', args=[tag2.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertEqual(len(response.data), 1)
+        response = response.json()
+        self.assertIsInstance(response['data'], list)
+        self.assertEqual(len(response['data']), 1)

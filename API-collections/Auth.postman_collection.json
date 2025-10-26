@@ -15,8 +15,8 @@
 					"script": {
 						"exec": [
 							"let response = pm.response.json();",
-							"let access_token = response?.access;",
-							"let refresh_token = response?.refresh;",
+							"let access_token = response?.data?.access;",
+							"let refresh_token = response?.data?.refresh;",
 							" ",
 							"if (access_token) {",
 							"    pm.environment.set(\"access_token\", access_token);",
@@ -65,7 +65,7 @@
 					"script": {
 						"exec": [
 							"let response = pm.response.json();",
-							"let access_token = response?.access;",
+							"let access_token = response?.data?.access;",
 							" ",
 							"if (access_token) {",
 							"    pm.environment.set(\"access_token\", access_token);",
