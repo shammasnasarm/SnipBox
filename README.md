@@ -64,3 +64,60 @@ SnipBox is a Django REST API for managing code snippets with JWT authentication.
    ```
 
 Now The API will be available at `http://localhost:8000`
+
+## API Collections
+
+### Postman Collections
+
+Ready-to-use Postman collections are available in the `API-collections/` directory:
+
+#### Available Collections:
+
+1. **`Auth.postman_collection.json`** - Authentication endpoints
+   - Login (Get Access Token)
+   - Refresh Token
+   - **Auto-token management**: Automatically saves tokens to environment variables
+
+2. **`Snippet.postman_collection.json`** - Snippet management endpoints
+   - List (Overview)
+   - Detail (Get specific snippet)
+   - Create
+   - Update (PUT)
+   - Delete
+
+3. **`Tags.postman_collection.json`** - Tag management endpoints
+   - Tags List
+   - Snippets under tag
+
+4. **`dev.postman_environment.json`** - Development environment variables
+   - `baseURL`: Your API base URL
+   - `access_token`: JWT access token (auto-populated)
+   - `refresh_token`: JWT refresh token (auto-populated)
+
+### How to Import:
+
+1. **Import Collections:**
+   - Open Postman
+   - Click "Import" button
+   - Select "File" tab
+   - Import all `.postman_collection.json` files from `API-collections/` directory
+
+2. **Import Environment:**
+   - Click "Import" button
+   - Select "File" tab
+   - Import `dev.postman_environment.json`
+   - Set the `baseURL` variable to `http://localhost:8000/api`
+
+### Environment Variables Setup:
+
+The environment file (`dev.postman_environment.json`) includes:
+- `baseURL`: Set to your API base URL (e.g., `http://localhost:8000/api`)
+- `access_token`: Automatically populated after login and refresh
+- `refresh_token`: Automatically populated after login
+
+### Quick Start with Collections:
+
+1. **Set Base URL**: Update `baseURL` in the environment to `http://localhost:8000/api`
+2. **Login**: Run the "Login" request from Auth collection with your credentials
+3. **Auto-token Management**: Tokens are automatically saved to environment variables
+4. **Test Endpoints**: All other requests will use the saved tokens automatically
